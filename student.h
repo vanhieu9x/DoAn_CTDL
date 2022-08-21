@@ -701,7 +701,7 @@ struct student{
 	int sex = 1; // 1 male, 2 female
 	char phoneNUmber[13];
 	int yearAdmission; // nam nhap hoc
-	//float mediumScore = 0;	
+	float mediumScore = 0;	
 };
 typedef struct student STUDENT;
 
@@ -723,7 +723,7 @@ bool isFull (ListSV pList)
 
 int checkId(ListSV &ds, char s[]){
 	for(int i=0; i<ds.n;i++)
-		if(strcmp(ds.nodes[i]->idStudent, s)==0)
+		if(strcmp(ds.nodes[i].idStudent, s)==0)
 			return 1;
 	return 0;
 }
@@ -739,8 +739,30 @@ int insertSV(ListSV &ds, int i, STUDENT sv){
 		ds.n++;
 		return 1;
 }
+
+//tạm viết
+void InsertOrderForListStudent(ListSV &ds, STUDENT sv){
+	insertSV(ds, 0, sv);
+}
+
+//delete vị trí thứ i
+void DeleteByOrdinal (struct ListSV &ds, int i)
+{
+  int j;
+  int temp;
+  if (i <= 0 || i > ds.n || isEmpty(ds))
+  {
+    return;
+  }
+  for (j = i; j < ds.n; j++)
+  {
+    ds.nodes[j-1] = ds.nodes[j];
+  }
+  ds.n--;
+}
+
 // Xoa sinh vien theo ma sinh vien
-int deleteSV(ListSV &ds, char s){
+int deleteSV(ListSV &ds, char* s){
 	if(ds.n==0)
 		return 0;
 	else{
@@ -749,7 +771,9 @@ int deleteSV(ListSV &ds, char s){
 				for(int j=i; j<ds.n; j++){
 					ds.nodes[j]=ds.nodes[j+1];
 				}
-				delete ds.nodes[ds.n];
+				//delete ds.nodes[ds.n];
+				int sizeDs = ds.n;
+				DeleteByOrdinal(ds, sizeDs);
 			}
 		}
 		ds.n--;
@@ -757,41 +781,24 @@ int deleteSV(ListSV &ds, char s){
 	}
 }
 
-//delete vị trí thứ i
-int DeleteByOrdinal (struct ListSV &ds, int i)
-{
-  int j;
-  int temp;
-  if (i <= 0 || i > ds.n || isEmpty(ds))
-  {
-    return FALSE;
-  }
-  for (j = i; j < ds.n; j++)
-  {
-    ds.nodes[j-1] = ds.nodes[j];
-  }
-  ds.n--;
-  return TRUE;
-}
-
 // dung selection sort
 
 void swapSV(STUDENT &a, STUDENT &b){
-	Ltc temp = a;
+	STUDENT temp = a;
 	a=b;
 	b=temp;
 }
 void selectionSortSV(ListSV &ds){
 	int min;
-	SV temp;
+	STUDENT temp;
 	for(int i=0;i<ds.n;i++){
 		min = i;
-		for(int j= i+1; j<n; j++){
-			if(strcmp(ds.nodes[j]->lastName, ds.nodes[min]->lastName)<0)
+		for(int j= i+1; j<ds.n; j++){
+			if(strcmp(ds.nodes[j].lastName, ds.nodes[min].lastName)<0)
 				min = j;
 		}
 		if(min!=i)
-			swapSV(ds.nodes[i], ds.nodes[j]);
+			swapSV(ds.nodes[i], ds.nodes[min]);
 	}
 }
 
@@ -808,28 +815,39 @@ int FindIndexStudent(ListSV ds, char* ma){
 }
 
 STUDENT BinarySearchStudent(ListSV ds, char* id){
-	if(ds.n==0)
-		return null;
+	if(!isEmpty(ds))
+		for(int i= 0; i<ds.n;i++){
+			if(strcmp(ds.nodes[i].idStudent, id)==0)
+				return ds.nodes[i];
+		}
+}
 
-	for(int i= 0; i<ds.n;i++){
-		if(strcmp(ds.nodes[mid].idStudent, id)==0)
-			return ds.nodes[mid];
+STUDENT FindStudent(ListSV ds, char* id)
+{
+	if(!isEmpty(ds))
+		for(int i= 0; i<ds.n;i++){
+			if(strcmp(ds.nodes[i].idStudent, id)==0)
+				return ds.nodes[i];
+		}
+	else{
+		STUDENT st;
+		st.sex = -1;
+		return st;
 	}
 }
 
 STUDENT FindStudentByOrdinal(ListSV ds, int ordinal){
-	if(ds.n==0||ds.n-1<ordinal) 
-		return NULL;
-	else{
-		p = new SV;
-		p = ds.nodes[ordinal];
-		return p
+	if(!isEmpty(ds)&&ds.n-1>=ordinal) 
+	{
+		return ds.nodes[ordinal];
 	}
 }
 
 bool isDelete(ListSV &ds, int ordinal){
 	if(ds.n==0||ds.n<ordinal) return false;
-	delete ds.nodes[ordinal];
+	
+	DeleteByOrdinal(ds, ordinal);
+	
 	for(int i=ordinal; i<ds.n - ordinal;i++){
 		ds.nodes[i]=ds.nodes[i+1];
 	}
@@ -845,14 +863,15 @@ bool IsDeletedStudentWithId(ListSV &ds, STUDENT data){
 	}else return false;
 }
 
-bool clearListStudent(ListSV &ds){
+bool ClearListStudent(ListSV &ds){
 	for(int i = 0; i<ds.n; i++)
-		delete ds.nodes[i];
+		DeleteByOrdinal(ds, i);
+		
 	ds.n=0;
 }
 
-void outputStudent(SV sv, int locate){
-	deletaOldData(sizeof(keyDisplayStudent)/sizeof(string), locate);
+void OutputStudent(STUDENT sv, int locate){
+	DeleteOldData(sizeof(keyDisplayStudent)/sizeof(string), locate);
 	Gotoxy(xKeyDisplay[0]+1, Y_DISPLAY + 3 + locate); cout<<sv.idStudent;
 	Gotoxy(xKeyDisplay[1]+1, Y_DISPLAY + 3 + locate); cout<<sv.fistName;
 	Gotoxy(xKeyDisplay[2]+1, Y_DISPLAY + 3 + locate); cout<<sv.lastName;
@@ -863,7 +882,7 @@ void outputStudent(SV sv, int locate){
 	Gotoxy(xKeyDisplay[5]+1, Y_DISPLAY + 3 + locate); cout<<sv.idClass;
 }
 
-void outputListStudentWithIdClassPerPage(ListSV ds, int indexBegin){
+void OutputListStudentWithIdClassPerPage(ListSV ds, int indexBegin){
 	if(ds.n==0) return;
 	int count = -1;
 	for(int i = 0 ; i<ds.n; i++){
@@ -871,7 +890,7 @@ void outputListStudentWithIdClassPerPage(ListSV ds, int indexBegin){
 		if(count == indexBegin){
 			int j= -1;
 			while(i<QUANTITY_PER_PAGE - 1&&i<ds.n){
-				outputStudent(ds.nodes[i], (++j)*2);
+				OutputStudent(ds.nodes[i], (++j)*2);
 				i++;
 			}
 			break;
@@ -883,14 +902,14 @@ void outputListStudentWithIdClassPerPage(ListSV ds, int indexBegin){
 }
 
 void InputStudent(ListSV &ds, STUDENT sv, bool isEdited = false){
-	showCur(true);
+	ShowCur(true);
 	int ordinal = 0;
 	bool isMoveUp = false;
 	bool isSave = false;
-	bool idIsEdited = false;
+	bool idIsExist = false;
 	
-	string idStudent, firstName, lastName, idClass;
-	int sex, phoneNumber;
+	string idStudent, firstName, lastName, idClass, phoneNumber;
+	int yearAdmission = 0, sex = 0;
 	
 	if(isEdited){
 		idStudent = sv.idStudent;
@@ -917,27 +936,28 @@ void InputStudent(ListSV &ds, STUDENT sv, bool isEdited = false){
 		switch(ordinal){
 			case 0:
 				if(isEdited) break;
-				checkMoveAndValidateID(idStudent, isMoveUp, ordinal, isSave, 20 + 7, 12);
-				if(findStudent(ds, (char *)idStudent.c_str())==NULL){
-					idIsExit = false;
+				CheckMoveAndValidateID(idStudent, isMoveUp, ordinal, isSave, 20 + 7, 12);
+				if(FindStudent(ds, (char *)idStudent.c_str()).sex != -1){
+					idIsExist = false;
 					break;
 				}
-				idIsExit = true;
+				idIsExist = true;
 				break;
 			case 1:
-				checkMoveAndValidateNameSubject(firstName, isMoveUp, ordinal, isSave, 17+7, 20);
+				CheckMoveAndValidateNameSubject(firstName, isMoveUp, ordinal, isSave, 17+7, 20);
 				break;
 			case 2:
-				checkMoveAndValidateNameSubject(lastName, isMoveUp, ordinal, isSave, 18+7, 10);
+				CheckMoveAndValidateNameSubject(lastName, isMoveUp, ordinal, isSave, 18+7, 10);
 				break;
 			case 3:
-				checkMoveAndValidateNumber(sex, isMoveUp, ordinal, isSave, 19+7, 2);
+				CheckMoveAndValidateNumber(sex, isMoveUp, ordinal, isSave, 19+7, 2);
 				break;
 			case 4:
-				checkMoveAndValidateNumber(phoneNumber, isMoveUp, ordinal, isSave, 20+7,11);
+				CheckMoveAndValidateID(phoneNumber, isMoveUp, ordinal, isSave, 20+7,11);
 				break;
-			//case 5:
-				//checkMoveAndValidateID(idClass, isMoveUp, ordinal, isSave, )
+			case 5:
+				CheckMoveAndValidateNumber(yearAdmission, isMoveUp, ordinal, isSave, 21 + 7, 2019);
+				break;
 		}
 		if(isMoveUp){
 			if(ordinal == 0);
@@ -954,10 +974,10 @@ void InputStudent(ListSV &ds, STUDENT sv, bool isEdited = false){
 			cout<< setw(50)<<setfill(' ')<<" ";
 			trim(firstName);
 			trim(lastName);
-			standarString(firstName);
-			standarString(lastName);
+			StandarString(firstName);
+			StandarString(lastName);
 			
-			if(sex==0 || firstName.empty()|| lastName.empty()|| phoneNumber == 0)
+			if(sex==0 || firstName.empty()|| lastName.empty()|| phoneNumber.empty())
 			{
 				Gotoxy(X_NOTIFY, Y_NOTIFY);
 				cout<<"Cac truong du lieu khong duoc de trong";
@@ -967,7 +987,69 @@ void InputStudent(ListSV &ds, STUDENT sv, bool isEdited = false){
 				cout<<"Ma sinh vien khong duoc trung";
 			}
 		}
+		
+		if (isMoveUp)
+		{
+			if (ordinal == 0)
+				isMoveUp = false;
+			ordinal--;
+		}
+		else
+		{
+			if (ordinal == 5)
+				isMoveUp = true;
+			ordinal++;
+		}		
+		if(isSave)
+		{	
+			Gotoxy(X_NOTIFY, Y_NOTIFY);			
+			cout << setw(50) << setfill(' ') << " ";
+			trim(firstName);
+			trim(lastName);
+			StandarString(firstName);
+			StandarString(lastName);
+		
+			if(sex == 0 || firstName.empty() || lastName.empty() || yearAdmission == 0 || phoneNumber.empty() )
+			{
+				Gotoxy(X_NOTIFY, Y_NOTIFY);
+				cout << "Cac truong du lieu khong dc de trong";
+			}
+			else if(idIsExist)
+			{
+				Gotoxy(X_NOTIFY, Y_NOTIFY);
+				cout << "Ma sinh vien khong duoc trung";
+			}
+			else
+			{						
+				strcpy(sv.idStudent, idStudent.c_str());				
+				strcpy(sv.fistName, firstName.c_str());
+				strcpy(sv.lastName, lastName.c_str());
+				strcpy(sv.phoneNUmber, phoneNumber.c_str());
+				sv.sex = sex;
+				
+				sv.yearAdmission = yearAdmission;
+				StandardName(sv.lastName);
+				StandardName(sv.fistName);
+				
+				if(isEdited)
+				{
+					STUDENT p = sv;
+				}else
+				{				
+					InsertOrderForListStudent(ds, sv);				
+				}
+				totalPageStudent =((ds.n - 1) / QUANTITY_PER_PAGE) + 1;
+				DeleteMenuAdd();
+				return;		
+			}
+			isSave = false;
+		}
+		else
+		{
+			isSave = false;
+		}
 	}
+	ShowCur(false);
 }
 
 void SetDefaultChooseStudent(STUDENT st, int ordinal)
@@ -985,7 +1067,7 @@ void EffectiveMenuStudent(int ordinal, STUDENT stnew, STUDENT stold)
 	currposPrecStudent = current;
 }
 
-void ChangePageChooseStudent()
+void ChangePageChooseStudent(ListSV ds)
 {
 	clrscr();
 	Display(keyDisplayStudent, sizeof(keyDisplayStudent) / sizeof(string));
@@ -1003,10 +1085,10 @@ STUDENT ChooseStudent(ListSV ds)
 	totalPageStudent = ((ds.n-1) / QUANTITY_PER_PAGE) + 1;
 	
 	STUDENT newNodeStudent = FindStudentByOrdinal(ds, currposStudent);
-	STUDENT oldNodeStudent = NULL;
+	STUDENT oldNodeStudent;
 	
 	OutputListStudentWithIdClassPerPage(ds, (pageNowStudent - 1) * QUANTITY_PER_PAGE);
-	SetDefaultChooseStudent(STUDENT, currposStudent);
+	SetDefaultChooseStudent(newNodeStudent, currposStudent);
 	
 	while(true)
 	{
@@ -1021,11 +1103,15 @@ STUDENT ChooseStudent(ListSV ds)
 					currposStudent = currposStudent - 1;
 					oldNodeStudent = newNodeStudent;
 					//for(newNodeStudent = l.pHead; newNodeStudent->pNext != oldNodeStudent; newNodeStudent = newNodeStudent->pNext);
+					for(int i= 0; i<ds.n;i++){
+						newNodeStudent = ds.nodes[i];
+						if(newNodeStudent.idStudent != oldNodeStudent.idStudent) break;
+					}
 					EffectiveMenuStudent(currposStudent, newNodeStudent, oldNodeStudent);				
 				}
 				break;
 			case KEY_DOWN:
-				if(currposStudent % QUANTITY_PER_PAGE < QUANTITY_PER_PAGE - 1 && ds.nodes[currposStudent + 1] != NULL)
+				if(currposStudent % QUANTITY_PER_PAGE < QUANTITY_PER_PAGE - 1 && ds.n >= currposStudent + 1)
 				{
 					currposStudent = currposStudent + 1;
 					oldNodeStudent = newNodeStudent;
@@ -1059,7 +1145,9 @@ STUDENT ChooseStudent(ListSV ds)
 				return newNodeStudent;
 				break;
 			case 27: 
-				return NULL; 
+				STUDENT st;
+				st.sex = -1;
+				return st; 
 				break;	
 		}
 	}	
@@ -1135,8 +1223,7 @@ backMenu:
 						InputStudent(ds, st, false);
 						if(strlen(st.idStudent) == 0) return;
 						
-						//InsertOrderForListStudent(temp, st);
-						insertSV(temp, 0 , st);
+						InsertOrderForListStudent(temp, st);
 						
 						n++;
 						totalPageStudent = ((n - 1) / QUANTITY_PER_PAGE) + 1;
@@ -1148,7 +1235,7 @@ backMenu:
 					else if( key == KEY_F3)
 					{
 						STUDENT k = ChooseStudent(temp);
-						if(k == NULL) goto backMenu;
+						if(k.sex == -1) goto backMenu;
 						
 						Gotoxy(X_NOTIFY, Y_NOTIFY);
 						cout << "Ban co chac chan xoa? Enter dong y";
@@ -1173,7 +1260,7 @@ backMenu:
 					else if( key == KEY_F4)
 					{
 						STUDENT k = ChooseStudent(temp);
-						if(k == NULL) goto backMenu;
+						if(k.sex == -1) goto backMenu;
 						
 						DisplayEdit(keyDisplayStudent, sizeof(keyDisplayStudent) / sizeof(string), 35);
 						InputStudent(ds, k, true);

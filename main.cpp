@@ -22,10 +22,10 @@ int main()
 	    	SetConsoleScreenBufferSize(handle, coord);	
 	PTR_LISTCREDITCLASS listCC = new LIST_CREDITCLASS;
 	TREE_SUBJECT t;
-	LIST_STUDENT l;
+	ListSV l;
 	
 	InitTreeSubject(t);
-	InitListStudent(l);
+	//InitListStudent(l);
 	
 	LoadCreditClassFromFile(listCC);	
 	LoadSubjectFormFile(t);

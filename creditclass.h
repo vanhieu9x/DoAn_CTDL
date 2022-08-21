@@ -1,4 +1,4 @@
-// lop tín ch?
+// lop tï¿½n ch?
 
 #ifndef _CREDITCLASS_H
 #define _CREDITCLASS_H
@@ -13,7 +13,7 @@ struct CreditClass{
 	unsigned int idClass;
 	char idSubject[11]; // ma mon hoc // key
 	char nameSubject[31];
-	char shoolYear[10]; // nien khoa
+	int shoolYear[10]; // nien khoa
 	int semester; // hoc ki
 	int group; // nhom
 	int studentMax;
@@ -49,7 +49,7 @@ PTR_CREDITCLASS FindCreditClassWithBinariSearch(PTR_LISTCREDITCLASS l, unsigned 
 }
 
 PTR_CREDITCLASS BinarySearchCreditClass(PTR_LISTCREDITCLASS l, int n, unsigned int id)
-{ // Ph?m vi ban d?u tìm ki?m là t? left=0 ?right =n-1
+{ // Ph?m vi ban d?u tï¿½m ki?m lï¿½ t? left=0 ?right =n-1
 	int left=0;
 	int right=n;
 	int j;
@@ -174,7 +174,6 @@ bool DeleteCreditClassIsSuccess(PTR_LISTCREDITCLASS &l, unsigned int id)
 }
 PTR_CREDITCLASS FindCrediClassWithCondition(PTR_LISTCREDITCLASS l, char* idSubject, int shoolYear, int semester, int group)
 {
-
 	for(int i = 0; i <= l->n; i++)
 	{
 		if(strcmp(l->listCreditClass[i]->idSubject,idSubject) == 0 &&

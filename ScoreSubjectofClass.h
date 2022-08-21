@@ -350,7 +350,7 @@ void Display_1(string key[], int xKeyDisplay[], int nKey)
 	}	
 }
 
-void caucuoi(LIST_STUDENT l, PTR_LISTCREDITCLASS lcc, string idClass)
+void caucuoi(ListSV l, PTR_LISTCREDITCLASS lcc, string idClass)
 {
 	REPORTSTUDENT* prSubject = new REPORTSTUDENT[100];
 	int indexprSubject = 0;
@@ -359,13 +359,23 @@ void caucuoi(LIST_STUDENT l, PTR_LISTCREDITCLASS lcc, string idClass)
 	int nIdSubject = 0;
 	
 //	initListReportStudent(l, idCLass);
-	for(NODE_STUDENT* p = l.pHead; p != NULL; p = p->pNext)
-	{
-		if(_stricmp(p->_student.idClass, (char*)idClass.c_str()) == 0)
-		{
-			strcpy(prSubject[indexprSubject].idStudent, p->_student.idStudent);
-			strcpy(prSubject[indexprSubject].fistName, p->_student.fistName);  
-			strcpy(prSubject[indexprSubject].lastName, p->_student.lastName);
+	// for(NODE_STUDENT* p = l.pHead; p != NULL; p = p->pNext)
+	// {
+	// 	if(_stricmp(p->_student.idClass, (char*)idClass.c_str()) == 0)
+	// 	{
+	// 		strcpy(prSubject[indexprSubject].idStudent, p->_student.idStudent);
+	// 		strcpy(prSubject[indexprSubject].fistName, p->_student.fistName);  
+	// 		strcpy(prSubject[indexprSubject].lastName, p->_student.lastName);
+	// 		InitListPointSubject(prSubject[indexprSubject].listPointSubject);
+	// 		indexprSubject++;
+	// 	}
+	// }
+
+	for(int i=0; i<l.n; i++){
+		if(_stricmp(l.nodes[i].idClass, (char*)idClass.c_str()) == 0){
+			strcpy(prSubject[indexprSubject].idStudent, l.nodes[i].idStudent);
+			strcpy(prSubject[indexprSubject].fistName, l.nodes[i].fistName);  
+			strcpy(prSubject[indexprSubject].lastName, l.nodes[i].lastName);
 			InitListPointSubject(prSubject[indexprSubject].listPointSubject);
 			indexprSubject++;
 		}
