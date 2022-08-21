@@ -4,7 +4,7 @@
 #include "subject.h"
 #include <sstream>
 // regsiter credit class  
-void inputDataFindCreditClass(int &schoolYear, int &semester, string &idStudent, ListSV l) // input data
+void inputDataFindCreditClass(string &schoolYear, int &semester, string &idStudent, ListSV l) // input data
 {
 	int ordinal = 0;
 	bool isMoveUp = false;
@@ -50,7 +50,7 @@ void inputDataFindCreditClass(int &schoolYear, int &semester, string &idStudent,
 			Gotoxy(X_NOTIFY, Y_NOTIFY - 1);
 			cout << setw(50) << setfill(' ') << " ";
 			
-			if(idStudent.empty() || semester == 0 || schoolYear == 0)
+			if(idStudent.empty() || semester == 0 )
 			{
 				Gotoxy(X_NOTIFY, Y_NOTIFY - 1);
 				cout << "Cac truong du lieu khong dc de trong";
@@ -74,7 +74,7 @@ void inputDataFindCreditClass(int &schoolYear, int &semester, string &idStudent,
 // end register credit class
 
 // output list student on register redit class
-void input(string &idSubject, int &shoolYear, int &semester, int &group, TREE_SUBJECT t)
+void input(string &idSubject, string &shoolYear, int &semester, int &group, TREE_SUBJECT t)
 {
 	int ordinal = 0;
 	bool isMoveUp = false;
@@ -132,7 +132,7 @@ void input(string &idSubject, int &shoolYear, int &semester, int &group, TREE_SU
 				Gotoxy(X_NOTIFY + 10, Y_NOTIFY);
 				cout << "Ma MH KHONG TON TAI";
 			}
-			else if(idSubject.empty() || semester == 0 || shoolYear == 0 || group == 0)
+			else if(idSubject.empty() || semester == 0 || group == 0)
 			{
 				Gotoxy(X_NOTIFY, Y_NOTIFY - 1);
 				cout << "Cac truong du lieu khong dc de trong";

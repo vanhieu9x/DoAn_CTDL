@@ -685,7 +685,8 @@
 //#endif
 
 
-
+ #ifndef STUDENT_H
+ #define STUDENT_H
 #define MAXLIST 5000
 #include"constant.h"
 #include"globalvariable.h"
@@ -1297,4 +1298,4 @@ backMenu:
 	else
 	 goto backMenu;	
 }
-
+ #endif

@@ -13,7 +13,7 @@ struct CreditClass{
 	unsigned int idClass;
 	char idSubject[11]; // ma mon hoc // key
 	char nameSubject[31];
-	int shoolYear[10]; // nien khoa
+	char shoolYear[10]; // nien khoa
 	int semester; // hoc ki
 	int group; // nhom
 	int studentMax;
@@ -172,7 +172,7 @@ bool DeleteCreditClassIsSuccess(PTR_LISTCREDITCLASS &l, unsigned int id)
 	l->n--;
 	return true;
 }
-PTR_CREDITCLASS FindCrediClassWithCondition(PTR_LISTCREDITCLASS l, char* idSubject, int shoolYear, int semester, int group)
+PTR_CREDITCLASS FindCrediClassWithCondition(PTR_LISTCREDITCLASS l, char* idSubject, string shoolYear, int semester, int group)
 {
 	for(int i = 0; i <= l->n; i++)
 	{
@@ -199,7 +199,7 @@ void InputCreditClass(PTR_LISTCREDITCLASS &l, PTR_CREDITCLASS &cc, TREE_SUBJECT 
 	
 	
 	string idSubject; // ma mon hoc
-	int shoolYear = 0; // nien khoa
+	string shoolYear ; // nien khoa
 	int semester = 0; // hoc ki 
 	int group = 0; // nhom
 	int studentMax = 0;
@@ -287,7 +287,8 @@ void InputCreditClass(PTR_LISTCREDITCLASS &l, PTR_CREDITCLASS &cc, TREE_SUBJECT 
 			strcpy(temp->idSubject, idSubject.c_str());
 			temp->idClass = 0;
 			temp->semester = semester;
-			temp->shoolYear = shoolYear;
+			//temp->shoolYear = shoolYear;
+			strcpy(temp->shoolYear, shoolYear.c_str());
 			temp->studentMax = studentMax;
 			temp->studentMin = studentMin;
 			temp->group = group;
@@ -299,7 +300,7 @@ void InputCreditClass(PTR_LISTCREDITCLASS &l, PTR_CREDITCLASS &cc, TREE_SUBJECT 
 			{
 				Gotoxy(X_NOTIFY, Y_NOTIFY); cout << "Cac truong du lieu khong duoc de trong";
 			}
-			else if(FindCrediClassWithCondition(l, (char*)idSubject.c_str(), shoolYear, semester, group) != NULL)
+			else if(FindCrediClassWithCondition(l, (char*)idSubject.c_str(), (char*)shoolYear.c_str(), semester, group) != NULL)
 			{
 				Gotoxy(X_NOTIFY, Y_NOTIFY); cout << "Lop tin chi da ton tai";
 			}else if(studentMax < studentMin)
@@ -314,7 +315,8 @@ void InputCreditClass(PTR_LISTCREDITCLASS &l, PTR_CREDITCLASS &cc, TREE_SUBJECT 
 				strcpy(cc->nameSubject, p->_subject.nameSubject);
 				//cc->idClass = ++l->n;
 				cc->group = group;
-				cc->shoolYear = shoolYear;
+				strcpy(cc->shoolYear, shoolYear.c_str());
+				//cc->shoolYear = shoolYear;
 				cc->studentMax = studentMax;
 				cc->studentMin = studentMin;
 				cc->semester = semester;

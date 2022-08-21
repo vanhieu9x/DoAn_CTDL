@@ -218,7 +218,7 @@ void SaveStudentToFile(ListSV l)
 	outFile.close();
 }
 
-void LoadStudentFromFile(ListSV &l)
+void LoadStudentFromFile(ListSV &ds)
 {
 	fstream inFile;
 	STUDENT st;
@@ -258,7 +258,7 @@ backMenu:
 	clrscr();
 	Gotoxy(X_TITLE, Y_TITLE); cout << "NHAP THONG TIN DE DANG KI LTC";
 	DisplayEdit(keyFindRegisterStudent, sizeof(keyFindRegisterStudent) / sizeof(string), 35);
-	int schoolYear = 0;
+	string schoolYear ;
 	int semester = 0;
 	int key;
 	string idStudent;
@@ -429,7 +429,8 @@ bool StatisticStudentOnCreditClassIsSucceed(PTR_LISTCREDITCLASS l, TREE_SUBJECT 
 	Gotoxy(X_TITLE, Y_TITLE); cout << "NHAP THON TIN DE KET XUAT DSSV";
 	DisplayEdit(keyFindCreditClass, sizeof(keyFindCreditClass) / sizeof(string), 35);
 	string id;
-	int schoolYear = 0, semester = 0, group = 0;
+	string schoolYear;
+	int semester = 0, group = 0;
 	int key;
 	input(id, schoolYear, semester, group, t);
 	
@@ -438,7 +439,7 @@ bool StatisticStudentOnCreditClassIsSucceed(PTR_LISTCREDITCLASS l, TREE_SUBJECT 
 
 	
 	ListSV tempStudetn;
-	InitListStudent(tempStudetn);
+	//InitListStudent(tempStudetn);
 	for (NODE_REGISTERSTUDENT *p = temp->listRegisterStudent.pHead; p != NULL; p = p->pNext)
 	{	
 		STUDENT q = BinarySearchStudent(listStudent, p->_registerStudent.idStudent);
@@ -590,7 +591,8 @@ bool inputSocreCreditClassIsSuccedd(PTR_LISTCREDITCLASS &pListCC, TREE_SUBJECT t
 	Gotoxy(X_TITLE, Y_TITLE); cout << "NHAP THON TIN LTC DE NHAP DIEM";
 	DisplayEdit(keyFindCreditClass, sizeof(keyFindCreditClass) / sizeof(string), 35);
 	string idSubject;
-	int schoolYear = 0, semester = 0, group = 0;
+	string schoolYear;
+	int semester = 0, group = 0;
 	input(idSubject, schoolYear, semester, group, t);
 	
 	PTR_CREDITCLASS tempCC = FindCrediClassWithCondition(pListCC, (char*)idSubject.c_str(), schoolYear, semester, group);
@@ -672,7 +674,8 @@ bool outputScoreofCreditClass(PTR_LISTCREDITCLASS pListCC, ListSV lst, TREE_SUBJ
 	Gotoxy(X_TITLE, Y_TITLE); cout << "NHAP THON TIN DE KET XUAT DIEM CUA LTC";
 	DisplayEdit(keyFindCreditClass, sizeof(keyFindCreditClass) / sizeof(string), 35);
 	string idSubject;
-	int schoolYear = 0, semester = 0, group = 0;
+	string schoolYear ;
+	int semester = 0, group = 0;
 	input(idSubject, schoolYear, semester, group, t);
 	
 	PTR_CREDITCLASS tempCC = FindCrediClassWithCondition(pListCC, (char*)idSubject.c_str(), schoolYear, semester, group);
