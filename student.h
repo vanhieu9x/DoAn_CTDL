@@ -1,4 +1,4 @@
-//// danh sách sinh viên
+//// danh sï¿½ch sinh viï¿½n
 //
 //#define _STUDENT_H
 //#include"creditclass.h"
@@ -1210,3 +1210,4 @@ backMenu:
 	else
 	 goto backMenu;	
 }
+
